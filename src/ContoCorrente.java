@@ -1,9 +1,14 @@
 public class ContoCorrente extends Conto{
 
-    public ContoCorrente(String iban, String nome, String cognome, String dataNascita, String cf) {
+    public ContoCorrente(String iban, Persona daAggiungere) {
         this.iban = iban;
-        Persona nuovaPersona = new Persona(nome, cognome, dataNascita, cf);
+        proprietario = daAggiungere;
         this.saldo = 0;
+    }
+
+    @Override
+    public String getTipo(){
+        return "ContoCorrente";
     }
 
     public boolean operazione(Conto conto, double quantita){

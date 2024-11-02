@@ -1,10 +1,10 @@
 public class Persona {
-    private String nome, cognome, indirizzo, cf;
+    private String nome, cognome, dataNascita, cf;
 
-    public Persona(String nome, String cognome, String indirizzo, String cf) {
+    public Persona(String nome, String cognome, String dataNascita, String cf) {
         this.nome = nome;
         this.cognome = cognome;
-        this.indirizzo = indirizzo;
+        this.dataNascita = dataNascita;
         this.cf = cf;
     }
 
@@ -32,8 +32,8 @@ public class Persona {
         return cognome;
     }
 
-    public String getIndirizzo() {
-        return indirizzo;
+    public String getDataNascitao() {
+        return dataNascita;
     }
 
     public String getCf() {

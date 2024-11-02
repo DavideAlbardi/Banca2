@@ -4,8 +4,8 @@ public class ContoWeb extends ContoCorrente {
     private String password;
     private boolean loggedIn;
 
-    public ContoWeb(String iban, String nome, String cognome, String dataNascita, String cf) {
-        super(iban, nome, cognome, dataNascita, cf);
+    public ContoWeb(String iban, Persona daAggiungere) {
+        super(iban, daAggiungere);
         this.password = "changeme";
     }
 
@@ -16,13 +16,14 @@ public class ContoWeb extends ContoCorrente {
         System.out.println("Scrivi la password per il login: ");
         Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine();
-        if (password == conto.password) {
+        if (password.equals(conto.password)) {
+            System.out.println("Password corretta");
             loggedIn = true;
             return true;
         } else
+            System.out.println("Password errata");
             loggedIn = false;
-        return false;
-// k
+            return false;
     }
 
     public boolean cambiaPassword(ContoWeb conto) {
@@ -30,18 +31,21 @@ public class ContoWeb extends ContoCorrente {
         Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine();
         conto.password = password;
-        if (conto.password == password) {
-            return true;
-        } else
-            return false;
+        if(conto.password.equals("changeme")){
+            while(conto.password.equals("changeme")){
+                System.out.println("Non va bene, scegli un'altra password: ");
+                password = scanner.nextLine();
+            }
+        }
+        return true;
     }
-
 
     public boolean operazione(ContoWeb conto, double quantita) {
 
         if (conto.loggedIn) {
             double cambiamento = conto.getSaldo() + quantita;
             if (cambiamento < 0) {
+                System.out.println("Non hai abbastanza credito da prelevare");
                 return false;
             } else {
                 conto.saldo = cambiamento;
@@ -53,4 +57,8 @@ public class ContoWeb extends ContoCorrente {
             return false;
     }
 
+    @Override
+    public String getTipo(){
+        return "ContoWeb";
+    }
 }
