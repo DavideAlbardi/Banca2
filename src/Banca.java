@@ -16,41 +16,46 @@ public class Banca {
 
     //In teoria nessun problema anche con questo metodo
     public void elenco(Banca bancaDaElencare){
-        for(int i = 0; i < conti.length; i++){
+        int i = 0;
+        while(i < conti.length && conti[i] != null){
             System.out.println(conti[i].getIban() +" "+conti[i].getSaldo());
+            i++;
         }
     }
 
     public void aggiungiConto(Persona daAggiungere, String tipo) {
         radiceIban = radiceIban + daAggiungere.getCf();
         //Controllo che il conto non sia già presente
-        for(int i = 0; i < conti.length; i++){
-            if(conti[i].getIban().equals(radiceIban)){
-                System.out.println("Conto già presente");
-                return;
+        if(conti == null) {
+            for (int i = 0; i < conti.length; i++) {
+                if (conti[i].getIban().equals(radiceIban)) {
+                    System.out.println("Conto già presente");
+                    return;
+                }
             }
         }
-
         //Controllo se ho spazio prima di aggiungere il conto
         if (attivi < max) {
             switch (tipo) {
                 case "Deposito":
                     ContoDeposito contoDeposito = new ContoDeposito(radiceIban, daAggiungere);
                     conti[attivi] = contoDeposito;
+                    this.attivi++;
                     break;
                 case "Web":
                     ContoWeb contoWeb = new ContoWeb(radiceIban, daAggiungere);
                     conti[attivi] = contoWeb;
+                    this.attivi++;
                     break;
                 case "Corrente":
                     ContoCorrente contoCorrente = new ContoCorrente(radiceIban, daAggiungere);
                     conti[attivi] = contoCorrente;
+                    this.attivi++;
                     break;
                 default:
                     System.out.println("Tipo di conto non valido");
                     return;
             }
-            this.attivi++;
         }else
             System.out.println("Numero massimo conti raggiunto");
     }
@@ -70,16 +75,7 @@ public class Banca {
             //La funzione getConto dà errore, non serve riscriverlo qua
             return;
         }
-        System.out.println(contoIban.getIban() + contoIban.getSaldo() + contoIban.getCF());
-    }
-
-    public double saldoConto(String iban){
-        Conto contoIban = getConto(iban);
-        if(contoIban == null){
-            //La funzione getConto dà errore, non serve riscriverlo qua
-            return 0;
-        }
-        return contoIban.getSaldo();
+        System.out.println("Ecco i dettagli del conto: " + contoIban.getIban() + " " +contoIban.getSaldo() + " "+contoIban.getCF());
     }
 
     public boolean operazione(String iban, double valoreOperazione){
@@ -117,15 +113,17 @@ public class Banca {
     public Conto getConto(String daTrovare){
         Conto contoIban;
         int i = 0;
-        while(this.conti[i].getIban() != daTrovare && i < conti.length){
+        while(conti[i] != null && i < conti.length && !this.conti[i].getIban().equals(daTrovare)){
             i++;
         }
         contoIban = this.conti[i];
-        if(contoIban.getIban().equals(daTrovare)) {
-            return contoIban;
-        }else{
-            System.out.println("Conto non trovato");
+
+        //Scritto in questo modo altrimenti non funziona
+        if(contoIban == null || !contoIban.getIban().equals(daTrovare)) {
+            System.out.println("Nessun conto trovato con iban " + daTrovare);
             return null;
+        }else{
+           return contoIban;
         }
     }
 

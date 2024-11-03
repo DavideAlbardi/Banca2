@@ -16,8 +16,8 @@ public class Persona {
         this.cognome = cognome;
     }
 
-    public void setIndirizzo(String indirizzo) {
-        this.indirizzo = indirizzo;
+    public void setIndirizzo(String dataNascita) {
+        this.dataNascita = dataNascita;
     }
 
     public void setCf(String cf) {
