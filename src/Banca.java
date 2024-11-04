@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Banca {
     private String nome;
     int max = 0;
@@ -24,31 +26,31 @@ public class Banca {
     }
 
     public void aggiungiConto(Persona daAggiungere, String tipo) {
-        radiceIban = radiceIban + daAggiungere.getCf();
+        String iban = radiceIban + daAggiungere.getCf();
+        int i = 0;
         //Controllo che il conto non sia già presente
-        if(conti == null) {
-            for (int i = 0; i < conti.length; i++) {
-                if (conti[i].getIban().equals(radiceIban)) {
-                    System.out.println("Conto già presente");
-                    return;
-                }
+        while (i < conti.length && conti[i] != null) {
+            if (conti[i].getIban().equals(iban)) {
+                System.out.println("Questo iban è già presente");
+                return;
             }
+            i++;
         }
         //Controllo se ho spazio prima di aggiungere il conto
         if (attivi < max) {
             switch (tipo) {
                 case "Deposito":
-                    ContoDeposito contoDeposito = new ContoDeposito(radiceIban, daAggiungere);
+                    ContoDeposito contoDeposito = new ContoDeposito(iban, daAggiungere);
                     conti[attivi] = contoDeposito;
                     this.attivi++;
                     break;
                 case "Web":
-                    ContoWeb contoWeb = new ContoWeb(radiceIban, daAggiungere);
+                    ContoWeb contoWeb = new ContoWeb(iban, daAggiungere);
                     conti[attivi] = contoWeb;
                     this.attivi++;
                     break;
                 case "Corrente":
-                    ContoCorrente contoCorrente = new ContoCorrente(radiceIban, daAggiungere);
+                    ContoCorrente contoCorrente = new ContoCorrente(iban, daAggiungere);
                     conti[attivi] = contoCorrente;
                     this.attivi++;
                     break;
@@ -59,6 +61,7 @@ public class Banca {
         }else
             System.out.println("Numero massimo conti raggiunto");
     }
+
     //In teoria nessun problema anche con questo metodo
     public double totaleSaldi(){
         double tot = 0;
@@ -125,6 +128,40 @@ public class Banca {
         }else{
            return contoIban;
         }
+    }
+
+    public boolean login(String iban) {
+        ContoWeb  conto = (ContoWeb) getConto(iban);
+
+        if (conto.getPassword().equals("changeme")) {
+            cambiaPassword(conto);
+        }
+        System.out.println("Scrivi la password per il login: ");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        if (input.equals(conto.getPassword())) {
+            System.out.println("Password corretta");
+            conto.setLoggedIn(true);
+            return true;
+        } else
+            System.out.println("Password errata");
+            conto.setLoggedIn(false);
+        return false;
+    }
+
+    public boolean cambiaPassword(ContoWeb conto) {
+        System.out.println("Scrivi la nuova password: ");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        conto.setPassword(input);
+
+        if(conto.getPassword().equals("changeme")){
+            while(conto.getPassword().equals("changeme")){
+                System.out.println("Non va bene, scegli un'altra password: ");
+                conto.setPassword(scanner.nextLine());
+            }
+        }
+        return true;
     }
 
     public String getNome() {

@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class ContoWeb extends ContoCorrente {
     private String password;
@@ -9,36 +8,7 @@ public class ContoWeb extends ContoCorrente {
         this.password = "changeme";
     }
 
-    public boolean login(ContoWeb conto) {
-        if (conto.password.equals("changeme")) {
-            conto.cambiaPassword(conto);
-        }
-        System.out.println("Scrivi la password per il login: ");
-        Scanner scanner = new Scanner(System.in);
-        String password = scanner.nextLine();
-        if (password.equals(conto.password)) {
-            System.out.println("Password corretta");
-            loggedIn = true;
-            return true;
-        } else
-            System.out.println("Password errata");
-            loggedIn = false;
-            return false;
-    }
 
-    public boolean cambiaPassword(ContoWeb conto) {
-        System.out.println("Scrivi la nuova password: ");
-        Scanner scanner = new Scanner(System.in);
-        String password = scanner.nextLine();
-        conto.password = password;
-        if(conto.password.equals("changeme")){
-            while(conto.password.equals("changeme")){
-                System.out.println("Non va bene, scegli un'altra password: ");
-                password = scanner.nextLine();
-            }
-        }
-        return true;
-    }
 
     public boolean operazione(ContoWeb conto, double quantita) {
 
@@ -55,6 +25,22 @@ public class ContoWeb extends ContoCorrente {
         } else
             System.out.println("Non hai effettuato il login");
             return false;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     @Override
