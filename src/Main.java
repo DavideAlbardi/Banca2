@@ -22,11 +22,13 @@ public class Main {
         Persona Paolo = new Persona("Paolo", "Jacovitti", "25/5/1970", "CFdiP");
         IntesaSaintPaul.aggiungiConto(Paolo, "Web");
         IntesaSaintPaul.elenco(IntesaSaintPaul);
+        //Eseguo un'operazione senza loggarmi
         IntesaSaintPaul.operazione("STPCFdiP", 200);
+        //Eseguo un'operazione dopo aver fatto il login
         IntesaSaintPaul.login("STPCFdiP");
         IntesaSaintPaul.operazione("STPCFdiP", 200);
         IntesaSaintPaul.dettagliConto("STPCFdiP");
-
+        //Aggiungo un conto con un iban che già esiste
         Persona Giovanni = new Persona("Giovanni", "Muciaccia", "30/7/2002", "CFdiP");
         IntesaSaintPaul.aggiungiConto(Giovanni, "Corrente");
         IntesaSaintPaul.elenco(IntesaSaintPaul);
