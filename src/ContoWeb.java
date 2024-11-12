@@ -8,8 +8,6 @@ public class ContoWeb extends ContoCorrente {
         this.password = "changeme";
     }
 
-
-
     public boolean operazione(ContoWeb conto, double quantita) {
 
         if (conto.loggedIn) {

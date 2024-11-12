@@ -1,10 +1,12 @@
-abstract class Conto {
+class Conto {
     protected String iban;
     protected double saldo;
     protected Persona proprietario;
     protected String tipo;
 
-    public abstract String getTipo();
+    public String getTipo() {
+        return null;
+    }
 
     public String getIban() {
         return iban;
@@ -12,6 +14,10 @@ abstract class Conto {
 
     public double getSaldo() {
         return saldo;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
     public String getCF(){

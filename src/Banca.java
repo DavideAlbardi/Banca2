@@ -2,10 +2,13 @@ import java.util.Scanner;
 
 public class Banca {
     private String nome;
-    int max = 0;
-    Conto[] conti;
+    private int max = 0;
+    private Conto[] conti;
     private int attivi;
     private String radiceIban;
+    private Accountable accountables[];
+    private int accountableIndex = 0;
+    private int maxAccountables = 20;
 
     // Nessun problema con questo costruttore
     public Banca(String nome, int max, String iban) {
@@ -25,6 +28,18 @@ public class Banca {
         }
     }
 
+    public boolean aggiungiAccountable(Conto contoDaTrovare,String nome, int quantita, String data){
+        Conto contoIban = getConto(contoDaTrovare);
+        if(contoIban == null){
+            System.out.println("Impossibile aggiungere accountable");
+            return false;
+        }
+        accountables[accountableIndex] = new Accountable(nome, quantita, data);
+        accountableIndex++;
+        System.out.println("Accountable aggiunto con successo");
+        return true;
+    }
+
     public void aggiungiConto(Persona daAggiungere, String tipo) {
         String iban = radiceIban + daAggiungere.getCf();
         int i = 0;
@@ -42,16 +57,19 @@ public class Banca {
                 case "Deposito":
                     ContoDeposito contoDeposito = new ContoDeposito(iban, daAggiungere);
                     conti[attivi] = contoDeposito;
+                    this.accountables = new Accountable[maxAccountables];
                     this.attivi++;
                     break;
                 case "Web":
                     ContoWeb contoWeb = new ContoWeb(iban, daAggiungere);
                     conti[attivi] = contoWeb;
+                    this.accountables = new Accountable[maxAccountables];
                     this.attivi++;
                     break;
                 case "Corrente":
                     ContoCorrente contoCorrente = new ContoCorrente(iban, daAggiungere);
                     conti[attivi] = contoCorrente;
+                    this.accountables = new Accountable[maxAccountables];
                     this.attivi++;
                     break;
                 default:
@@ -72,8 +90,8 @@ public class Banca {
         return tot;
     }
 
-    public void dettagliConto(String iban){
-        Conto contoIban = getConto(iban);
+    public void dettagliConto(Conto contoDaTrovare){
+        Conto contoIban = getConto(contoDaTrovare);
         if(contoIban == null){
             //La funzione getConto dà errore, non serve riscriverlo qua
             return;
@@ -81,8 +99,8 @@ public class Banca {
         System.out.println("Ecco i dettagli del conto: " + contoIban.getIban() + " " +contoIban.getSaldo() + " "+contoIban.getCF());
     }
 
-    public boolean operazione(String iban, double valoreOperazione){
-        Conto contoIban = getConto(iban);
+    public boolean operazione(Conto contoDaTrovare, double valoreOperazione){
+        Conto contoIban = getConto(contoDaTrovare);
         if(contoIban == null){
             //La funzione getConto dà errore, non serve riscriverlo qua
             return false;
@@ -113,8 +131,9 @@ public class Banca {
     }
 
     //In teoria nessun problema anche con questo metodo
-    public Conto getConto(String daTrovare){
+    public Conto getConto(Conto contoDaTrovare){
         Conto contoIban;
+        String daTrovare = contoDaTrovare.getIban();
         int i = 0;
         while(conti[i] != null && i < conti.length && !this.conti[i].getIban().equals(daTrovare)){
             i++;
@@ -130,8 +149,9 @@ public class Banca {
         }
     }
 
-    public boolean login(String iban) {
-        ContoWeb  conto = (ContoWeb) getConto(iban);
+    public boolean login(Conto contoDaTrovare) {
+        String iban = contoDaTrovare.getIban();
+        ContoWeb  conto = (ContoWeb) getConto(contoDaTrovare);
 
         if (conto.getPassword().equals("changeme")) {
             cambiaPassword(conto);
